@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080808">
+  <meta name="description" content="Black Aura — Personal Developer Portfolio">
+  <title>BLACK AURA | NORIDOMI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Particle background -->
+  <canvas id="particles"></canvas>
+
+  <!-- Custom cursor -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- Background glow and parallax shapes -->
+  <div class="ambient">
+    <div class="ambient-glow"></div>
+    <div class="parallax-shape shape-a" data-depth="0.025"></div>
+    <div class="parallax-shape shape-b" data-depth="-0.045"></div>
+    <div class="parallax-shape shape-c" data-depth="0.065"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <a class="logo" href="#home">N<span>.</span></a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#home" class="nav-link active">Home</a>
+      <a href="#about" class="nav-link">About</a>
+      <a href="#projects" class="nav-link">Projects</a>
+      <a href="#skills" class="nav-link">Skills</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="icon-btn" id="themeBtn" aria-label="Toggle theme" title="Change theme">
+        <svg class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path>
+        </svg>
+      </button>
+      <button class="music-btn" id="musicBtn">
+        <span class="music-bars" id="musicBars">
+          <i></i><i></i><i></i><i></i>
+        </span>
+        <span id="musicLabel">PLAY MUSIC</span>
+      </button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero section" id="home">
+      <div class="hero-content reveal">
+        <div class="hero-status">
+          <span class="status-dot"></span>
+          <span>CREATIVE DEVELOPER</span>
+          <span class="status-line"></span>
+          <span>VIET NAM</span>
+        </div>
+
+        <div class="hero-avatar-wrap">
+          <div class="avatar-orbit orbit-one"></div>
+          <div class="avatar-orbit orbit-two"></div>
+          <div class="avatar-halo"></div>
+          <img src="assets/avatar.jpg" alt="My avatar" class="hero-avatar">
+          <span class="avatar-mark">✳</span>
+        </div>
+
+        <p class="hero-intro">HELLO, I'M</p>
+        <h1 class="hero-title">
+          NORIDOMI<span class="title-period">.</span>
+        </h1>
+        <div class="hero-role">
+          <span class="role-prefix">I CREATE</span>
+          <span class="typing-text" id="typingText"></span>
+          <span class="typing-cursor">|</span>
+        </div>
+        <p class="hero-description">
+          Turning ideas into digital experiences.
+          Minimal design, powerful motion and endless creativity.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#projects" class="btn btn-white magnetic">
+            EXPLORE PROJECTS <span>↗</span>
+          </a>
+          <a href="#contact" class="btn btn-outline magnetic">
+            CONTACT ME <span>↗</span>
+          </a>
+        </div>
+
+        <div class="hero-bottom">
+          <span>SCROLL TO DISCOVER</span>
+          <div class="scroll-line"><span></span></div>
+          <span>01 / 05</span>
+        </div>
+      </div>
+      <div class="hero-gif-3d" aria-hidden="true">
+        <div class="gif-plane plane-back"><img src="https://i.pinimg.com/originals/e5/09/68/e50968e3461aa65eab4432a1ead39d12.gif" alt=""></div>
+        <div class="gif-plane plane-left"><img src="https://i.pinimg.com/originals/e5/09/68/e50968e3461aa65eab4432a1ead39d12.gif" alt=""></div>
+        <div class="gif-plane plane-right"><img src="https://i.pinimg.com/originals/e5/09/68/e50968e3461aa65eab4432a1ead39d12.gif" alt=""></div>
+        <div class="gif-plane plane-main"><img src="https://i.pinimg.com/originals/e5/09/68/e50968e3461aa65eab4432a1ead39d12.gif" alt=""></div>
+        <div class="gif-shadow"></div>
+      </div>
+
+      <div class="hero-3d-stage" aria-hidden="true">
+        <div class="scene-grid"></div>
+        <div class="scene-ring ring-a"></div>
+        <div class="scene-ring ring-b"></div>
+        <div class="scene-ring ring-c"></div>
+        <div class="float-cube cube-a"><span></span></div>
+        <div class="float-cube cube-b"><span></span></div>
+        <div class="float-panel panel-a">01</div>
+        <div class="float-panel panel-b">N.</div>
+        <div class="scene-core"><span>N</span><i></i></div>
+      </div>
+      <div class="hero-side-text">DESIGN · CODE · CREATE</div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section about" id="about">
+      <div class="section-heading reveal">
+        <span class="section-index">01 — ABOUT</span>
+        <h2>BEYOND THE <span>ORDINARY.</span></h2>
+        <p>A little bit about who I am.</p>
+      </div>
+
+      <div class="about-layout">
+        <div class="about-image-wrap reveal">
+          <div class="about-image-frame">
+            <img src="assets/avatar.jpg" alt="Profile portrait">
+            <span class="image-corner corner-tl"></span>
+            <span class="image-corner corner-tr"></span>
+            <span class="image-corner corner-bl"></span>
+            <span class="image-corner corner-br"></span>
+          </div>
+          <span class="image-caption">FIG. 001 — THE CREATOR</span>
+        </div>
+
+        <div class="about-content reveal">
+          <span class="eyebrow">WHO AM I?</span>
+          <h3>Creating with <span>purpose.</span><br>Building with passion.</h3>
+          <p>
+            Xin chào, tôi là Noridomi Bell. Tôi yêu thích công nghệ,
+            thiết kế giao diện và lập trình website.
+            Tôi luôn tìm tòi những ý tưởng mới để biến
+            những dòng code thành trải nghiệm trực quan.
+          </p>
+          <p>
+            Với tôi, một website không chỉ cần hoạt động tốt,
+            mà còn cần có cá tính, cảm xúc và dấu ấn riêng.
+          </p>
+
+          <div class="about-stats">
+            <div class="stat">
+              <strong>∞</strong>
+              <span>CREATIVITY</span>
+            </div>
+            <div class="stat">
+              <strong>24/7</strong>
+              <span>CURIOUS MIND</span>
+            </div>
+            <div class="stat">
+              <strong>01</strong>
+              <span>UNIQUE VISION</span>
+            </div>
+          </div>
+
+          <a href="#contact" class="text-link">LET'S CONNECT <span>↗</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="section projects" id="projects">
+      <div class="section-heading reveal">
+        <span class="section-index">02 — SELECTED WORKS</span>
+        <h2>MY <span>PROJECTS.</span></h2>
+        <p>Some things I've been working on.</p>
+      </div>
+
+      <div class="carousel-shell reveal">
+        <div class="carousel-top">
+          <span>PORTFOLIO / 2026</span>
+          <div class="carousel-controls">
+            <button class="carousel-btn" id="prevProject" aria-label="Previous project">←</button>
+            <button class="carousel-btn" id="nextProject" aria-label="Next project">→</button>
+          </div>
+        </div>
+
+        <div class="carousel-viewport" id="carouselViewport">
+          <div class="carousel-track" id="carouselTrack">
+            <article class="project-card">
+              <div class="project-image">
+                <img src="assets/project1.jpg" alt="Portfolio website project">
+                <span class="project-count">01 / 03</span>
+                <span class="project-arrow">↗</span>
+              </div>
+              <div class="project-meta">
+                <span>WEB DESIGN</span>
+                <span>2026</span>
+              </div>
+              <h3>PERSONAL PORTFOLIO</h3>
+              <p>A minimal personal website with smooth motion and modern interactions.</p>
+            </article>
+
+            <article class="project-card">
+              <div class="project-image">
+                <img src="assets/project2.jpg" alt="Discord project">
+                <span class="project-count">02 / 03</span>
+                <span class="project-arrow">↗</span>
+              </div>
+              <div class="project-meta">
+                <span>DEVELOPMENT</span>
+                <span>2026</span>
+              </div>
+              <h3>DISCORD CONTROL</h3>
+              <p>A creative concept for a community dashboard and digital tools.</p>
+            </article>
+
+            <article class="project-card">
+              <div class="project-image">
+                <img src="assets/project3.jpg" alt="Creative project">
+                <span class="project-count">03 / 03</span>
+                <span class="project-arrow">↗</span>
+              </div>
+              <div class="project-meta">
+                <span>EXPERIMENTAL</span>
+                <span>2026</span>
+              </div>
+              <h3>VISUAL EXPERIMENTS</h3>
+              <p>Exploring particles, 3D motion, typography and interaction design.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="carousel-bottom">
+          <span id="carouselCurrent">01</span>
+          <div class="carousel-progress">
+            <span id="carouselProgress"></span>
+          </div>
+          <span>03</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section skills" id="skills">
+      <div class="section-heading reveal">
+        <span class="section-index">03 — EXPERTISE</span>
+        <h2>MY <span>ARSENAL.</span></h2>
+        <p>Tools I use to bring ideas to life.</p>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill-card reveal">
+          <span class="skill-number">01</span>
+          <div class="skill-icon">⌘</div>
+          <h3>HTML</h3>
+          <p>Structure & Accessibility</p>
+          <div class="skill-line"><span style="--level:90%"></span></div>
+        </div>
+        <div class="skill-card reveal">
+          <span class="skill-number">02</span>
+          <div class="skill-icon">◈</div>
+          <h3>CSS</h3>
+          <p>Motion & Visual Design</p>
+          <div class="skill-line"><span style="--level:85%"></span></div>
+        </div>
+        <div class="skill-card reveal">
+          <span class="skill-number">03</span>
+          <div class="skill-icon">⟨/⟩</div>
+          <h3>JAVASCRIPT</h3>
+          <p>Interaction & Logic</p>
+          <div class="skill-line"><span style="--level:75%"></span></div>
+        </div>
+        <div class="skill-card reveal">
+          <span class="skill-number">04</span>
+          <div class="skill-icon">⌬</div>
+          <h3>GITHUB</h3>
+          <p>Version Control</p>
+          <div class="skill-line"><span style="--level:80%"></span></div>
+        </div>
+      </div>
+      <p class="skills-note">* Skill levels are illustrative and can be adjusted to reflect your actual experience.</p>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact" id="contact">
+      <div class="contact-card reveal">
+        <span class="section-index">04 — CONTACT</span>
+        <div class="contact-symbol">✳</div>
+        <h2>LET'S MAKE<br>SOMETHING <span>ICONIC.</span></h2>
+        <p>Have an idea? Let's turn it into something memorable.</p>
+        <a href="https://discord.com/" target="_blank" rel="noopener noreferrer" class="btn btn-white magnetic">
+          GET IN TOUCH <span>↗</span>
+        </a>
+        <div class="contact-decoration">N.</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a class="logo" href="#home">N<span>.</span></a>
+    <p>© 2026 NORIDOMI BELL — DESIGNED WITH INTENTION.</p>
+    <a href="#home" class="back-top">BACK TO TOP ↑</a>
+  </footer>
+
+  <!-- Music -->
+  <audio id="bgMusic" src="assets/music.mp3" loop preload="none"></audio>
+
+  <!-- Visualizer -->
+  <div class="visualizer-wrap" id="visualizerWrap" aria-label="Music visualizer">
+    <span class="visualizer-label">NOW PLAYING</span>
+    <canvas id="visualizer" width="240" height="55"></canvas>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
