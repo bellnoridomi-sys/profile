@@ -12,6 +12,13 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="preloader" id="preloader" aria-hidden="true">
+    <div class="preloader-inner">
+      <div class="preloader-logo">A<span>.</span></div>
+      <div class="preloader-track"><span></span></div>
+      <p>INITIALIZING CREATIVE SPACE</p>
+    </div>
+  </div>
   <!-- Particle background -->
   <canvas id="particles"></canvas>
 
@@ -35,6 +42,7 @@
     <nav class="nav-links" id="navLinks">
       <a href="#home" class="nav-link active">Home</a>
       <a href="#about" class="nav-link">About</a>
+      <a href="#journey" class="nav-link">Journey</a>
       <a href="#projects" class="nav-link">Projects</a>
       <a href="#skills" class="nav-link">Skills</a>
       <a href="#contact" class="nav-link">Contact</a>
@@ -46,6 +54,9 @@
           <circle cx="12" cy="12" r="4"></circle>
           <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"></path>
         </svg>
+      </button>
+      <button class="icon-btn terminal-trigger" id="terminalBtn" aria-label="Open secret terminal" title="Secret terminal (~)">
+        <span aria-hidden="true">&gt;_</span>
       </button>
       <button class="music-btn" id="musicBtn">
         <span class="music-bars" id="musicBars">
@@ -103,7 +114,7 @@
         <div class="hero-bottom">
           <span>SCROLL TO DISCOVER</span>
           <div class="scroll-line"><span></span></div>
-          <span>01 / 05</span>
+          <span>01 / 06</span>
         </div>
       </div>
       
@@ -156,6 +167,17 @@
             mà còn cần có cá tính, cảm xúc và dấu ấn riêng.
           </p>
 
+          <div class="discord-presence" id="discordPresence" data-user-id="1393847310949290026" data-status="loading">
+            <div class="presence-avatar" id="presenceAvatar" aria-hidden="true">A</div>
+            <div class="presence-copy">
+              <span class="presence-eyebrow">DISCORD PRESENCE · ACCOUNT 1</span>
+              <strong class="presence-status" id="presenceStatus">CONNECTING</strong>
+              <span class="presence-activity" id="presenceActivity">Checking live status…</span>
+            </div>
+            <a class="presence-link" href="https://discord.com/users/1393847310949290026" target="_blank" rel="noopener noreferrer" aria-label="Open Discord profile">↗</a>
+            <a class="presence-setup" href="https://discord.com/servers/819285379982557265" target="_blank" rel="noopener noreferrer">ENABLE LIVE STATUS</a>
+          </div>
+
           <div class="about-stats">
             <div class="stat">
               <strong>∞</strong>
@@ -176,10 +198,58 @@
       </div>
     </section>
 
+    <!-- JOURNEY -->
+    <section class="section journey" id="journey">
+      <div class="section-heading reveal">
+        <span class="section-index">02 — THE JOURNEY</span>
+        <h2>MADE BY <span>CURIOSITY.</span></h2>
+        <p>A few milestones behind the things I build.</p>
+      </div>
+
+      <div class="timeline-list">
+        <article class="timeline-item reveal">
+          <span class="timeline-number">01</span>
+          <div class="timeline-marker"><span></span></div>
+          <div class="timeline-content">
+            <span class="timeline-kicker">THE FOUNDATION</span>
+            <h3>Curiosity turned into code.</h3>
+            <p>Learning the fundamentals of HTML, CSS and JavaScript, then shaping them into interfaces that feel clear and intentional.</p>
+          </div>
+        </article>
+        <article class="timeline-item reveal">
+          <span class="timeline-number">02</span>
+          <div class="timeline-marker"><span></span></div>
+          <div class="timeline-content">
+            <span class="timeline-kicker">EXPLORING TOOLS</span>
+            <h3>Beyond the browser.</h3>
+            <p>Experimenting with Discord bots, automation, dashboards and small tools that make online communities easier to manage.</p>
+          </div>
+        </article>
+        <article class="timeline-item reveal">
+          <span class="timeline-number">03</span>
+          <div class="timeline-marker"><span></span></div>
+          <div class="timeline-content">
+            <span class="timeline-kicker">BUILDING PROJECTS</span>
+            <h3>Ideas become experiences.</h3>
+            <p>Combining practical functionality with thoughtful visuals, smooth interactions and a distinct identity.</p>
+          </div>
+        </article>
+        <article class="timeline-item reveal">
+          <span class="timeline-number">04</span>
+          <div class="timeline-marker"><span></span></div>
+          <div class="timeline-content">
+            <span class="timeline-kicker">CURRENT FOCUS</span>
+            <h3>BLACK AURA.</h3>
+            <p>Refining the details: better UI, cleaner code, purposeful motion and digital experiences that feel personal.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <!-- PROJECTS -->
     <section class="section projects" id="projects">
       <div class="section-heading reveal">
-        <span class="section-index">02 — SELECTED WORKS</span>
+        <span class="section-index">03 — SELECTED WORKS</span>
         <h2>MY <span>PROJECTS.</span></h2>
         <p>Some things I've been working on.</p>
       </div>
@@ -207,6 +277,8 @@
               </div>
               <h3>PERSONAL PORTFOLIO</h3>
               <p>A minimal personal website with smooth motion and modern interactions.</p>
+              <div class="project-tags"><span>HTML</span><span>CSS</span><span>JAVASCRIPT</span></div>
+              <div class="project-footer"><a href="https://github.com/bellnoridomi-sys/profile" target="_blank" rel="noopener noreferrer">VIEW SOURCE <span>↗</span></a><span class="project-status">PERSONAL BUILD</span></div>
             </article>
 
             <article class="project-card tilt-effect shine-sweep">
@@ -221,6 +293,8 @@
               </div>
               <h3>DISCORD CONTROL</h3>
               <p>A creative concept for a community dashboard and digital tools.</p>
+              <div class="project-tags"><span>DISCORD</span><span>NODE.JS</span><span>AUTOMATION</span></div>
+              <div class="project-footer"><a href="#contact">DISCUSS THE BUILD <span>↗</span></a><span class="project-status">IN PROGRESS</span></div>
             </article>
 
             <article class="project-card tilt-effect shine-sweep">
@@ -235,6 +309,8 @@
               </div>
               <h3>VISUAL EXPERIMENTS</h3>
               <p>Exploring particles, 3D motion, typography and interaction design.</p>
+              <div class="project-tags"><span>CANVAS</span><span>ANIMATION</span><span>UI</span></div>
+              <div class="project-footer"><a href="#contact">LET'S TALK <span>↗</span></a><span class="project-status">EXPERIMENTAL</span></div>
             </article>
           </div>
         </div>
@@ -252,7 +328,7 @@
     <!-- SKILLS -->
     <section class="section skills" id="skills">
       <div class="section-heading reveal">
-        <span class="section-index">03 — EXPERTISE</span>
+        <span class="section-index">04 — EXPERTISE</span>
         <h2>MY <span>ARSENAL.</span></h2>
         <p>Tools I use to bring ideas to life.</p>
       </div>
@@ -293,7 +369,7 @@
     <!-- CONTACT -->
     <section class="section contact" id="contact">
       <div class="contact-card reveal tilt-effect">
-        <span class="section-index">04 — CONTACT</span>
+        <span class="section-index">05 — CONTACT</span>
         <div class="contact-symbol">✳</div>
         <h2>LET'S MAKE<br>SOMETHING <span>ICONIC.</span></h2>
         <p>Have an idea? Let's turn it into something memorable.</p>
@@ -319,11 +395,46 @@
     <a href="#home" class="back-top">BACK TO TOP ↑</a>
   </footer>
 
-  <audio id="bgMusic" src="assets/music.mp3" loop autoplay preload="auto"></audio>
+  <audio id="bgMusic" src="assets/music.mp3" loop preload="metadata"></audio>
 
-  <div class="visualizer-wrap" id="visualizerWrap" aria-label="Music visualizer">
-    <span class="visualizer-label">NOW PLAYING</span>
+  <div class="visualizer-wrap music-dock" id="visualizerWrap" aria-label="Music player">
+    <div class="music-dock-heading">
+      <span class="visualizer-label"><i class="music-live-dot"></i> NOW PLAYING</span>
+      <button class="music-dock-toggle" id="musicDockToggle" type="button" aria-label="Play or pause music">Ⅱ</button>
+    </div>
+    <div class="music-track-name">Aki's soundtrack</div>
+    <span class="music-track-subtitle">LOCAL PLAYLIST</span>
     <canvas id="visualizer" width="240" height="55"></canvas>
+    <div class="music-seek-row">
+      <span id="musicCurrent">0:00</span>
+      <input id="musicSeek" type="range" min="0" max="1000" value="0" aria-label="Music progress">
+      <span id="musicDuration">--:--</span>
+    </div>
+    <div class="music-volume-row">
+      <span>VOLUME</span>
+      <input id="musicVolume" type="range" min="0" max="1" step="0.01" value="0.72" aria-label="Music volume">
+    </div>
+  </div>
+
+  <div class="terminal-modal" id="terminalModal" aria-hidden="true">
+    <div class="terminal-backdrop" data-terminal-close></div>
+    <section class="terminal-window" role="dialog" aria-modal="true" aria-labelledby="terminalTitle">
+      <header class="terminal-header">
+        <div class="terminal-lights"><i></i><i></i><i></i></div>
+        <span id="terminalTitle">AKI // SYSTEM TERMINAL</span>
+        <button class="terminal-close" id="terminalClose" type="button" aria-label="Close terminal">×</button>
+      </header>
+      <div class="terminal-output" id="terminalOutput" aria-live="polite">
+        <p class="terminal-welcome">BLACK AURA SYSTEM [v2.0]</p>
+        <p>Type <b>help</b> to see available commands.</p>
+      </div>
+      <form class="terminal-form" id="terminalForm" autocomplete="off">
+        <label for="terminalInput">aki@black-aura <span>~</span></label>
+        <input id="terminalInput" name="command" type="text" spellcheck="false" placeholder="type a command..." aria-label="Terminal command">
+        <button type="submit" aria-label="Run command">↵</button>
+      </form>
+      <p class="terminal-hint">ESC TO CLOSE · ~ TO TOGGLE</p>
+    </section>
   </div>
 
   <script src="script.js"></script>
