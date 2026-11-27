@@ -654,42 +654,6 @@ document.addEventListener("visibilitychange", () => {
     if (!music.paused && !reducedMotion) drawVisualizer();
   }
 });
-document.addEventListener('DOMContentLoaded', () => {
-  // 1. TỰ ĐỘNG BẬT NHẠC
-  const audio = document.getElementById('bg-music');
-  if (audio) {
-    audio.play().catch(() => {
-      // Nếu trình duyệt chặn autoplay, tự động phát ngay khi người dùng click bất kỳ đâu
-      document.addEventListener('click', () => {
-        audio.play();
-      }, { once: true });
-    });
-  }
-
-  // 2. HIỆU ỨNG CARD NGHIÊNG NHẸ THEO CON TRỎ CHUỘT
-  const card = document.querySelector('.card');
-  if (card) {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-      
-      // Tính toán độ nghiêng (tối đa 10 độ)
-      const rotateX = ((y - centerY) / centerY) * -10;
-      const rotateY = ((x - centerX) / centerX) * 10;
-      
-      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-      // Trả card về vị trí ban đầu khi di chuột ra ngoài
-      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-    });
-  }
-});
 // Bổ sung hiệu ứng nghiêng khi rê chuột vào các thẻ (Tilt Effect)
 document.addEventListener('DOMContentLoaded', () => {
   const tiltElements = document.querySelectorAll('.tilt-effect');
@@ -714,3 +678,335 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+/* =========================================================
+   BLACK AURA 2.0 — LIVE PRESENCE / TERMINAL / MUSIC / LOADER
+   ========================================================= */
+
+// Brief page intro. Wait for the page assets, then get out of the way.
+(() => {
+  const preloader = $("#preloader");
+  if (!preloader) return;
+  const hidePreloader = () => {
+    window.setTimeout(() => {
+      preloader.classList.add("is-hidden");
+      window.setTimeout(() => preloader.remove(), 650);
+    }, 180);
+  };
+  if (document.readyState === "complete") hidePreloader();
+  else window.addEventListener("load", hidePreloader, { once: true });
+  window.setTimeout(hidePreloader, 2800);
+})();
+
+// Discord presence via Lanyard. The account owner must opt in by joining Lanyard.
+(() => {
+  const card = $("#discordPresence");
+  if (!card) return;
+
+  const userId = card.dataset.userId;
+  const statusNode = $("#presenceStatus");
+  const activityNode = $("#presenceActivity");
+  const avatarNode = $("#presenceAvatar");
+  const statusNames = {
+    online: "ONLINE",
+    idle: "IDLE",
+    dnd: "DO NOT DISTURB",
+    offline: "OFFLINE"
+  };
+
+  function setUnavailable(message) {
+    card.dataset.status = "offline";
+    statusNode.textContent = "STATUS UNAVAILABLE";
+    activityNode.textContent = message;
+  }
+
+  function renderPresence(presence) {
+    if (!presence) return;
+    const status = presence.discord_status || "offline";
+    card.dataset.status = status;
+    statusNode.textContent = statusNames[status] || "OFFLINE";
+
+    const user = presence.discord_user;
+    if (user && user.id && user.avatar) {
+      const avatarUrl = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=96`;
+      avatarNode.innerHTML = "";
+      const image = document.createElement("img");
+      image.src = avatarUrl;
+      image.alt = "";
+      image.loading = "lazy";
+      image.onerror = () => { avatarNode.textContent = "A"; };
+      avatarNode.appendChild(image);
+    }
+
+    if (presence.listening_to_spotify && presence.spotify) {
+      activityNode.textContent = `Listening to ${presence.spotify.song} — ${presence.spotify.artist}`;
+      return;
+    }
+
+    const activities = Array.isArray(presence.activities) ? presence.activities : [];
+    const activity = activities.find((item) => item.type !== 4 && item.name);
+    if (activity) {
+      const verbs = { 0: "Playing", 1: "Streaming", 2: "Listening to", 3: "Watching", 5: "Competing in" };
+      activityNode.textContent = `${verbs[activity.type] || "Using"} ${activity.name}`;
+    } else {
+      activityNode.textContent = status === "offline" ? "Currently offline on Discord" : "Online — no active status";
+    }
+  }
+
+  async function fetchPresence() {
+    try {
+      const response = await fetch(`https://api.lanyard.rest/v1/users/${encodeURIComponent(userId)}`, {
+        headers: { Accept: "application/json" },
+        cache: "no-store"
+      });
+      if (!response.ok) throw new Error("Presence endpoint unavailable");
+      const payload = await response.json();
+      if (!payload.success || !payload.data) throw new Error("Account not registered with Lanyard");
+      renderPresence(payload.data);
+    } catch (error) {
+      setUnavailable("Join the Lanyard server to share live Discord status.");
+    }
+  }
+
+  let socket = null;
+  let heartbeatTimer = null;
+  let reconnectTimer = null;
+  let pollingTimer = null;
+  let reconnectDelay = 5000;
+
+  function startRestFallback() {
+    if (pollingTimer) return;
+    fetchPresence();
+    pollingTimer = window.setInterval(fetchPresence, 60000);
+  }
+
+  function connectSocket() {
+    if (!("WebSocket" in window)) {
+      startRestFallback();
+      return;
+    }
+    try {
+      socket = new WebSocket("wss://api.lanyard.rest/socket");
+    } catch (error) {
+      startRestFallback();
+      return;
+    }
+
+    socket.addEventListener("message", (event) => {
+      let packet;
+      try { packet = JSON.parse(event.data); } catch (error) { return; }
+
+      if (packet.op === 1) {
+        const heartbeatInterval = Number(packet.d && packet.d.heartbeat_interval) || 30000;
+        if (socket.readyState === WebSocket.OPEN) {
+          socket.send(JSON.stringify({ op: 2, d: { subscribe_to_ids: [userId] } }));
+        }
+        window.clearInterval(heartbeatTimer);
+        heartbeatTimer = window.setInterval(() => {
+          if (socket && socket.readyState === WebSocket.OPEN) {
+            socket.send(JSON.stringify({ op: 3 }));
+          }
+        }, heartbeatInterval);
+        return;
+      }
+
+      if (packet.op !== 0 || !packet.d) return;
+      if (packet.t === "INIT_STATE") {
+        const initial = packet.d[userId];
+        if (initial) renderPresence(initial);
+      } else if (packet.t === "PRESENCE_UPDATE" && packet.d.user_id === userId) {
+        renderPresence(packet.d);
+      }
+    });
+
+    socket.addEventListener("open", () => {
+      reconnectDelay = 5000;
+    });
+
+    socket.addEventListener("error", () => {
+      startRestFallback();
+    });
+
+    socket.addEventListener("close", () => {
+      window.clearInterval(heartbeatTimer);
+      startRestFallback();
+      window.clearTimeout(reconnectTimer);
+      reconnectTimer = window.setTimeout(connectSocket, reconnectDelay);
+      reconnectDelay = Math.min(reconnectDelay * 1.7, 60000);
+    });
+  }
+
+  fetchPresence();
+  connectSocket();
+  window.addEventListener("beforeunload", () => {
+    window.clearInterval(heartbeatTimer);
+    window.clearInterval(pollingTimer);
+    window.clearTimeout(reconnectTimer);
+    if (socket) socket.close();
+  }, { once: true });
+})();
+
+// Lightweight command-line easter egg. All output uses textContent-safe nodes.
+(() => {
+  const modal = $("#terminalModal");
+  const openButton = $("#terminalBtn");
+  const closeButton = $("#terminalClose");
+  const form = $("#terminalForm");
+  const input = $("#terminalInput");
+  const output = $("#terminalOutput");
+  if (!modal || !form || !input || !output) return;
+
+  const sectionMap = {
+    home: "home",
+    about: "about",
+    journey: "journey",
+    projects: "projects",
+    skills: "skills",
+    contact: "contact"
+  };
+
+  function addOutput(text, className = "") {
+    const line = document.createElement("p");
+    if (className) line.className = className;
+    line.textContent = text;
+    output.appendChild(line);
+    output.scrollTop = output.scrollHeight;
+  }
+
+  function openTerminal() {
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("terminal-open");
+    window.setTimeout(() => input.focus(), 60);
+  }
+
+  function closeTerminal() {
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("terminal-open");
+    if (openButton) openButton.focus();
+  }
+
+  function runCommand(raw) {
+    const command = raw.trim();
+    const [name, ...args] = command.split(/\s+/);
+    const key = (name || "").toLowerCase();
+    if (!key) return;
+
+    addOutput(`aki@black-aura ~ ${command}`, "terminal-command");
+
+    const commands = {
+      help: () => {
+        addOutput("help       show available commands");
+        addOutput("about      learn about Aki");
+        addOutput("projects   view selected work");
+        addOutput("journey    view the developer journey");
+        addOutput("skills     jump to skills");
+        addOutput("social     show social profiles");
+        addOutput("open <section>  navigate to a section");
+        addOutput("music      toggle the soundtrack");
+        addOutput("clear      clear terminal output");
+      },
+      about: () => addOutput("Aki — creative developer exploring web experiences, Discord tools and interaction design."),
+      projects: () => addOutput("Selected work: Personal Portfolio · Discord Control · Visual Experiments."),
+      journey: () => addOutput("Curiosity → Exploration → Building → BLACK AURA. Use: open journey"),
+      skills: () => addOutput("HTML · CSS · JavaScript · GitHub"),
+      social: () => {
+        addOutput("Discord account 1: 1393847310949290026");
+        addOutput("Discord account 2: 1135576893740036227");
+        addOutput("GitHub: github.com/bellnoridomi-sys");
+      },
+      contact: () => { closeTerminal(); document.querySelector("#contact").scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" }); },
+      music: () => { if (musicButton) musicButton.click(); addOutput("Soundtrack toggled."); },
+      clear: () => { output.innerHTML = ""; },
+      whoami: () => addOutput("aki@black-aura — curious by nature, building by choice.")
+    };
+
+    if (key === "open") {
+      const section = (args[0] || "").toLowerCase();
+      if (!sectionMap[section]) {
+        addOutput("Unknown section. Try: home, about, journey, projects, skills, contact.");
+        return;
+      }
+      closeTerminal();
+      document.getElementById(sectionMap[section]).scrollIntoView({
+        behavior: reducedMotion ? "auto" : "smooth"
+      });
+      return;
+    }
+
+    if (commands[key]) commands[key]();
+    else addOutput(`Command not found: ${key}. Type "help" for commands.`);
+  }
+
+  const musicButton = $("#musicBtn");
+  openButton && openButton.addEventListener("click", openTerminal);
+  closeButton && closeButton.addEventListener("click", closeTerminal);
+  modal.addEventListener("click", (event) => {
+    if (event.target.matches("[data-terminal-close]")) closeTerminal();
+  });
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    runCommand(input.value);
+    input.value = "";
+  });
+
+  document.addEventListener("keydown", (event) => {
+    const target = event.target;
+    const typing = target && (target.matches("input, textarea, select") || target.isContentEditable);
+    if (event.key === "Escape" && modal.classList.contains("open")) {
+      closeTerminal();
+      return;
+    }
+    if (!typing && (event.key === "~" || event.key === "`")) {
+      event.preventDefault();
+      modal.classList.contains("open") ? closeTerminal() : openTerminal();
+    }
+  });
+})();
+
+// Additional player controls share the existing audio element and analyser.
+(() => {
+  const music = $("#bgMusic");
+  const musicButton = $("#musicBtn");
+  const dockToggle = $("#musicDockToggle");
+  const seek = $("#musicSeek");
+  const volume = $("#musicVolume");
+  const currentLabel = $("#musicCurrent");
+  const durationLabel = $("#musicDuration");
+  if (!music || !musicButton) return;
+
+  const formatTime = (seconds) => {
+    if (!Number.isFinite(seconds) || seconds < 0) return "--:--";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60).toString().padStart(2, "0");
+    return `${mins}:${secs}`;
+  };
+
+  music.volume = volume ? Number(volume.value) : 0.72;
+
+  function syncPlayer() {
+    if (currentLabel) currentLabel.textContent = formatTime(music.currentTime);
+    if (durationLabel) durationLabel.textContent = formatTime(music.duration);
+    if (seek && Number.isFinite(music.duration) && music.duration > 0 && document.activeElement !== seek) {
+      seek.value = String(Math.round((music.currentTime / music.duration) * 1000));
+    }
+    if (dockToggle) dockToggle.textContent = music.paused ? "▶" : "Ⅱ";
+  }
+
+  dockToggle && dockToggle.addEventListener("click", () => musicButton.click());
+  volume && volume.addEventListener("input", () => {
+    music.volume = Number(volume.value);
+  });
+  seek && seek.addEventListener("input", () => {
+    if (Number.isFinite(music.duration) && music.duration > 0) {
+      music.currentTime = (Number(seek.value) / 1000) * music.duration;
+      syncPlayer();
+    }
+  });
+
+  ["loadedmetadata", "timeupdate", "durationchange", "play", "pause", "ended"].forEach((eventName) => {
+    music.addEventListener(eventName, syncPlayer);
+  });
+  syncPlayer();
+})();
