@@ -687,7 +687,10 @@ document.addEventListener('DOMContentLoaded', () => {
 (() => {
   const preloader = $("#preloader");
   if (!preloader) return;
+  let preloaderHidden = false;
   const hidePreloader = () => {
+    if (preloaderHidden) return;
+    preloaderHidden = true;
     window.setTimeout(() => {
       preloader.classList.add("is-hidden");
       window.setTimeout(() => preloader.remove(), 650);
@@ -718,10 +721,14 @@ document.addEventListener('DOMContentLoaded', () => {
     card.dataset.status = "offline";
     statusNode.textContent = "STATUS UNAVAILABLE";
     activityNode.textContent = message;
+    const setupLink = card.querySelector(".presence-setup");
+    if (setupLink) setupLink.hidden = false;
   }
 
   function renderPresence(presence) {
     if (!presence) return;
+    const setupLink = card.querySelector(".presence-setup");
+    if (setupLink) setupLink.hidden = true;
     const status = presence.discord_status || "offline";
     card.dataset.status = status;
     statusNode.textContent = statusNames[status] || "OFFLINE";
