@@ -507,5 +507,16 @@
   </div>
 
   <script src="script.js"></script>
+  <script>
+    window.setTimeout(function () {
+      if (document.documentElement.dataset.appReady === "true") return;
+      var loader = document.getElementById("preloader");
+      if (loader) loader.remove();
+      document.querySelectorAll(".reveal:not(.show)").forEach(function (element) {
+        element.classList.add("show");
+      });
+      document.documentElement.classList.add("app-fallback");
+    }, 4000);
+  </script>
 </body>
 </html>
