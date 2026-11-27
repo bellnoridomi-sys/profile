@@ -190,19 +190,20 @@ let particles = [];
 let canvasWidth = 0;
 let canvasHeight = 0;
 let particleAnimationId = null;
-let particleDpr = Math.min(window.devicePixelRatio || 1, 2);
+let particleDpr = Math.min(window.devicePixelRatio || 1, 1.5);
+let lastParticleFrame = 0;
 
 const particleSettings = {
-  desktopCount: 75,
-  mobileCount: 35,
-  connectionDistance: 125,
-  speed: 0.35
+  desktopCount: 48,
+  mobileCount: 20,
+  connectionDistance: 112,
+  speed: 0.28
 };
 
 function resizeParticles() {
   canvasWidth = window.innerWidth;
   canvasHeight = window.innerHeight;
-  particleDpr = Math.min(window.devicePixelRatio || 1, 2);
+  particleDpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
   particleCanvas.width = canvasWidth * particleDpr;
   particleCanvas.height = canvasHeight * particleDpr;
@@ -232,7 +233,12 @@ function getParticleColor() {
     : "255, 255, 255";
 }
 
-function drawParticles() {
+function drawParticles(timestamp = 0) {
+  if (!reducedMotion && timestamp && timestamp - lastParticleFrame < 32) {
+    particleAnimationId = requestAnimationFrame(drawParticles);
+    return;
+  }
+  lastParticleFrame = timestamp || performance.now();
   particleCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 
   const color = getParticleColor();
@@ -384,89 +390,224 @@ if (!reducedMotion) {
   typingText.textContent = typingWords[0];
 }
 
-// PROJECT CAROUSEL
+// PROJECT CAROUSEL + CATEGORY FILTERS
 const carouselTrack = $("#carouselTrack");
 const carouselViewport = $("#carouselViewport");
-const projectCards = $$(".project-card", carouselTrack);
+const projectCards = $(".project-card", carouselTrack);
+const projectFilters = $(".project-filter");
 const prevProject = $("#prevProject");
 const nextProject = $("#nextProject");
 const carouselCurrent = $("#carouselCurrent");
 const carouselProgress = $("#carouselProgress");
+const carouselTotal = $("#carouselTotal");
+const projectFilterCount = $("#projectFilterCount");
 
 let currentProject = 0;
 let cardsPerPage = 1;
 let maxProjectIndex = 0;
 let carouselStartX = 0;
+let activeProjectFilter = "all";
+
+function getVisibleProjectCards() {
+  return projectCards.filter((card) => !card.hidden);
+}
 
 function updateCarouselSize() {
-  if (!projectCards.length) return;
-
+  const visibleCards = getVisibleProjectCards();
   const width = window.innerWidth;
+  cardsPerPage = activeProjectFilter === "all"
+    ? (width <= 600 ? 1 : width <= 850 ? 2 : 3)
+    : 1;
 
-  cardsPerPage = width <= 600 ? 1 : width <= 850 ? 2 : 3;
-  maxProjectIndex = Math.max(
-    0, projectCards.length - cardsPerPage
-  );
-
+  maxProjectIndex = Math.max(0, visibleCards.length - cardsPerPage);
   currentProject = Math.min(currentProject, maxProjectIndex);
   updateCarousel();
 }
 
 function updateCarousel() {
-  if (!projectCards.length) return;
+  const visibleCards = getVisibleProjectCards();
+  carouselTrack.classList.toggle("is-filtered", activeProjectFilter !== "all");
 
-  const cardWidth = projectCards[0].getBoundingClientRect().width;
+  if (!visibleCards.length) {
+    carouselTrack.style.transform = "translateX(0)";
+    prevProject.disabled = true;
+    nextProject.disabled = true;
+    carouselCurrent.textContent = "00";
+    if (carouselTotal) carouselTotal.textContent = "00";
+    if (carouselProgress) carouselProgress.style.width = "0%";
+    if (projectFilterCount) projectFilterCount.textContent = "NO PROJECTS";
+    return;
+  }
+
+  const cardWidth = visibleCards[0].getBoundingClientRect().width;
   const gap = parseFloat(getComputedStyle(carouselTrack).gap) || 0;
-  const offset = currentProject * (cardWidth + gap);
-
-  carouselTrack.style.transform = `translateX(-${offset}px)`;
+  carouselTrack.style.transform = `translateX(-${currentProject * (cardWidth + gap)}px)`;
 
   prevProject.disabled = currentProject === 0;
   nextProject.disabled = currentProject >= maxProjectIndex;
-
-  carouselCurrent.textContent =
-    String(currentProject + 1).padStart(2, "0");
-
-  const progress = projectCards.length <= 1
-    ? 100
-    : ((currentProject + 1) / projectCards.length) * 100;
-
-  carouselProgress.style.width = `${progress}%`;
+  carouselCurrent.textContent = String(currentProject + 1).padStart(2, "0");
+  if (carouselTotal) carouselTotal.textContent = String(visibleCards.length).padStart(2, "0");
+  if (carouselProgress) {
+    const progress = visibleCards.length <= 1 ? 100 : ((currentProject + 1) / visibleCards.length) * 100;
+    carouselProgress.style.width = `${progress}%`;
+  }
+  if (projectFilterCount) {
+    projectFilterCount.textContent = `SHOWING ${visibleCards.length} PROJECT${visibleCards.length === 1 ? "" : "S"}`;
+  }
 }
+
+projectFilters.forEach((button) => {
+  button.addEventListener("click", () => {
+    activeProjectFilter = button.dataset.projectFilter || "all";
+    projectFilters.forEach((filter) => {
+      const active = filter === button;
+      filter.classList.toggle("active", active);
+      filter.setAttribute("aria-pressed", String(active));
+    });
+
+    projectCards.forEach((card) => {
+      card.hidden = activeProjectFilter !== "all" && card.dataset.category !== activeProjectFilter;
+    });
+
+    currentProject = 0;
+    updateCarouselSize();
+  });
+});
 
 prevProject.addEventListener("click", () => {
   currentProject = Math.max(0, currentProject - 1);
   updateCarousel();
 });
-
 nextProject.addEventListener("click", () => {
-  currentProject = Math.min(
-    maxProjectIndex, currentProject + 1
-  );
+  currentProject = Math.min(maxProjectIndex, currentProject + 1);
   updateCarousel();
 });
 
-// Swipe on touch screens
 carouselViewport.addEventListener("touchstart", (event) => {
   carouselStartX = event.touches[0].clientX;
 }, { passive: true });
-
 carouselViewport.addEventListener("touchend", (event) => {
-  const endX = event.changedTouches[0].clientX;
-  const delta = endX - carouselStartX;
-
+  const delta = event.changedTouches[0].clientX - carouselStartX;
   if (Math.abs(delta) > 45) {
-    if (delta < 0 && currentProject < maxProjectIndex) {
-      currentProject++;
-    } else if (delta > 0 && currentProject > 0) {
-      currentProject--;
-    }
+    if (delta < 0 && currentProject < maxProjectIndex) currentProject++;
+    else if (delta > 0 && currentProject > 0) currentProject--;
     updateCarousel();
   }
 }, { passive: true });
 
 window.addEventListener("resize", updateCarouselSize);
 updateCarouselSize();
+
+// Project case-study modal.
+(() => {
+  const modal = $("#projectModal");
+  const closeButton = $("#projectModalClose");
+  const modalImage = $("#projectModalImage");
+  const modalType = $("#projectModalType");
+  const modalStatus = $("#projectModalStatus");
+  const modalTitle = $("#projectModalTitle");
+  const modalDescription = $("#projectModalDescription");
+  const modalTags = $("#projectModalTags");
+  const modalAction = $("#projectModalAction");
+  let lastTrigger = null;
+
+  if (!modal) return;
+
+  function closeProjectModal() {
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("project-modal-open");
+    if (lastTrigger) lastTrigger.focus();
+  }
+
+  function openProjectModal(card, trigger) {
+    const image = card.querySelector(".project-image img");
+    const meta = card.querySelector(".project-meta");
+    const source = card.querySelector(".project-footer a");
+    const title = card.querySelector("h3");
+    const description = card.querySelector(":scope > p");
+    const status = card.querySelector(".project-status");
+    if (!image || !title || !description) return;
+
+    lastTrigger = trigger;
+    modalImage.src = image.currentSrc || image.src;
+    modalImage.alt = image.alt || title.textContent.trim();
+    modalType.textContent = meta ? meta.firstElementChild.textContent.trim() : "PROJECT";
+    modalStatus.textContent = status ? status.textContent.trim() : "SELECTED WORK";
+    modalTitle.textContent = title.textContent.trim();
+    modalDescription.textContent = description.textContent.trim();
+    modalTags.replaceChildren();
+
+    card.querySelectorAll(".project-tags span").forEach((tag) => {
+      const chip = document.createElement("span");
+      chip.textContent = tag.textContent.trim();
+      modalTags.appendChild(chip);
+    });
+
+    if (source) {
+      modalAction.href = source.getAttribute("href") || "#contact";
+      modalAction.replaceChildren(document.createTextNode(source.textContent.replace("↗", "").trim()));
+      const arrow = document.createElement("span");
+      arrow.textContent = "↗";
+      modalAction.appendChild(arrow);
+      if (source.target === "_blank") {
+        modalAction.target = "_blank";
+        modalAction.rel = "noopener noreferrer";
+        delete modalAction.dataset.closeOnClick;
+      } else {
+        modalAction.removeAttribute("target");
+        modalAction.dataset.closeOnClick = "true";
+      }
+    }
+
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+    document.body.classList.add("project-modal-open");
+    closeButton.focus();
+  }
+
+  carouselTrack.addEventListener("click", (event) => {
+    const trigger = event.target.closest("[data-project-open]");
+    if (!trigger) return;
+    const card = trigger.closest(".project-card");
+    if (card) openProjectModal(card, trigger);
+  });
+
+  closeButton.addEventListener("click", closeProjectModal);
+  modal.addEventListener("click", (event) => {
+    if (event.target.matches("[data-project-close]")) closeProjectModal();
+  });
+  modalAction.addEventListener("click", () => {
+    if (modalAction.dataset.closeOnClick === "true") closeProjectModal();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal.classList.contains("open")) {
+      closeProjectModal();
+    }
+  });
+})();
+
+// Scroll progress: coalesce scroll events to a single animation frame.
+(() => {
+  const fill = $("#scrollProgressFill");
+  if (!fill) return;
+  let scheduled = false;
+  function updateProgress() {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+    fill.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+    scheduled = false;
+  }
+  function requestUpdate() {
+    if (!scheduled) {
+      scheduled = true;
+      window.requestAnimationFrame(updateProgress);
+    }
+  }
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate, { passive: true });
+  updateProgress();
+})();
 
 // ACTIVE NAVIGATION
 const navLinks = $$(".nav-link");
