@@ -2203,56 +2203,6 @@ main,
    ========================================================= */
 
 /* A short, quiet loading moment — no blocking animation loop. */
-.preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 3000;
-  display: grid;
-  place-items: center;
-  background: #08090c;
-  opacity: 1;
-  visibility: visible;
-  transition: opacity .55s ease, visibility .55s ease;
-}
-.preloader.is-hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-.preloader-inner {
-  width: min(220px, calc(100% - 48px));
-  text-align: center;
-}
-.preloader-logo {
-  margin-bottom: 22px;
-  color: #fff;
-  font: 700 52px/1 "Space Grotesk", sans-serif;
-  letter-spacing: -5px;
-}
-.preloader-logo span { color: rgba(255,255,255,.42); }
-.preloader-track {
-  height: 2px;
-  overflow: hidden;
-  background: rgba(255,255,255,.12);
-}
-.preloader-track span {
-  display: block;
-  width: 40%;
-  height: 100%;
-  background: #fff;
-  animation: preloaderProgress 1.05s cubic-bezier(.45,0,.55,1) infinite;
-}
-.preloader-inner > p {
-  margin-top: 13px;
-  color: rgba(255,255,255,.5) !important;
-  font: 600 8px/1.4 "Space Grotesk", sans-serif;
-  letter-spacing: 2px;
-}
-@keyframes preloaderProgress {
-  from { transform: translateX(-110%); }
-  to { transform: translateX(260%); }
-}
-
 /* Header shortcut */
 .terminal-trigger {
   font: 700 11px/1 "Space Grotesk", sans-serif !important;
@@ -2690,7 +2640,6 @@ main,
   .terminal-form label { font-size: 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .preloader-track span { animation: none; width: 100%; }
   .terminal-window { animation: none; }
 }
 
@@ -2706,157 +2655,6 @@ body.terminal-open { overflow: hidden; }
   }
 }
 
-
-/* From Uiverse.io by Navarog21 - https://uiverse.io/Navarog21/ordinary-rat-19
-   MIT License, Copyright (c) Navarog21 (Arkiweez) */
-.aki-uiverse-play {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  width: 11em;
-  height: 4em;
-  padding: 0 14px;
-  outline: none;
-  border: none;
-  background: transparent;
-  color: #ddebf0 !important;
-  font-size: 13px;
-  font-weight: bold;
-  cursor: pointer;
-  isolation: isolate;
-}
-.aki-play-label {
-  position: relative;
-  z-index: 2;
-  color: inherit !important;
-  font: 700 10px/1 "Space Grotesk", sans-serif;
-  letter-spacing: .18em;
-  text-shadow: none !important;
-  white-space: nowrap;
-}
-.aki-uiverse-play .music-bars {
-  position: relative;
-  z-index: 2;
-  height: 13px;
-  gap: 2px;
-  opacity: .72;
-}
-.aki-uiverse-play .music-bars i {
-  width: 2px;
-  height: 4px;
-  border-radius: 5px;
-  background: currentColor;
-}
-.aki-uiverse-play.playing .music-bars i {
-  animation: musicPulse .55s ease-in-out infinite alternate;
-}
-.aki-uiverse-play .music-bars i:nth-child(2) { animation-delay: .15s; }
-.aki-uiverse-play .music-bars i:nth-child(3) { animation-delay: .3s; }
-.aki-uiverse-play .music-bars i:nth-child(4) { animation-delay: .1s; }
-
-#aki-play-clip {
-  --aki-clip-color: #2761c3;
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  border: 5px double var(--aki-clip-color);
-  box-shadow: inset 0 0 15px #195480;
-  clip-path: polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%);
-  -webkit-clip-path: polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%);
-  transition: box-shadow .2s ease, border-color .2s ease;
-  pointer-events: none;
-}
-.aki-play-arrow {
-  position: absolute;
-  z-index: 2;
-  top: 35%;
-  width: 11%;
-  height: 30%;
-  background: #2761c3;
-  transition: .2s;
-  pointer-events: none;
-}
-.aki-right-arrow {
-  left: 102%;
-  clip-path: polygon(100% 49%,0 0,0 100%);
-  -webkit-clip-path: polygon(100% 49%,0 0,0 100%);
-}
-.aki-left-arrow {
-  left: -13.5%;
-  clip-path: polygon(100% 0,100% 100%,0 50%);
-  -webkit-clip-path: polygon(100% 0,100% 100%,0 50%);
-}
-.aki-play-corner {
-  position: absolute;
-  width: 4em;
-  height: 4em;
-  background: #2761c3;
-  box-shadow: inset 1px 1px 8px #2781c3;
-  transform: scale(1) rotate(45deg);
-  transition: .2s;
-}
-#aki-right-top { top: -1.98em; left: 91%; }
-#aki-left-top { top: -1.96em; left: -3em; }
-#aki-left-bottom { top: 2.10em; left: -2.15em; }
-#aki-right-bottom { top: 45%; left: 88%; }
-.aki-uiverse-play:hover .aki-right-arrow {
-  background: #27c39f;
-  left: -15%;
-  animation: aki-right-arrow8 .6s ease-in-out both infinite alternate;
-}
-.aki-uiverse-play:hover .aki-left-arrow {
-  background: #27c39f;
-  left: 103%;
-  animation: aki-left-arrow8 .6s ease-in-out both infinite alternate;
-}
-.aki-uiverse-play:hover #aki-left-top {
-  animation: aki-change-color8 .1s ease-in-out .05s both, aki-light-effect8 .2s linear .4s both;
-}
-.aki-uiverse-play:hover #aki-right-top {
-  animation: aki-change-color8 .1s ease-in-out .15s both, aki-light-effect8 .2s linear .4s both;
-}
-.aki-uiverse-play:hover #aki-right-bottom {
-  animation: aki-change-color8 .1s ease-in-out .25s both, aki-light-effect8 .2s linear .4s both;
-}
-.aki-uiverse-play:hover #aki-left-bottom {
-  animation: aki-change-color8 .1s ease-in-out .35s both, aki-light-effect8 .2s linear .4s both;
-}
-.aki-uiverse-play:hover .aki-play-corner {
-  transform: scale(1.25) rotate(45deg);
-}
-.aki-uiverse-play:hover #aki-play-clip {
-  animation: aki-green-light8 .2s ease-in-out .55s both;
-  --aki-clip-color: #27c39f;
-}
-@keyframes aki-change-color8 {
-  from { background-color: #2781c3; }
-  to { background-color: #27c39f; }
-}
-@keyframes aki-light-effect8 {
-  from { box-shadow: 1px 1px 5px #27c39f; }
-  to { box-shadow: 0 0 2px #27c39f; }
-}
-@keyframes aki-green-light8 {
-  to { box-shadow: inset 0 0 32px #27c39f; }
-}
-@keyframes aki-left-arrow8 {
-  from { transform: translateX(0); }
-  to { transform: translateX(10px); }
-}
-@keyframes aki-right-arrow8 {
-  from { transform: translateX(0); }
-  to { transform: translateX(-10px); }
-}
-.aki-uiverse-play:focus-visible {
-  outline: 2px solid rgba(255,255,255,.8);
-  outline-offset: 5px;
-}
-.aki-uiverse-play:active { transform: scale(.97); }
 
 /* From Uiverse.io by codebykay101 - https://uiverse.io/codebykay101/ugly-lion-23
    MIT License, Copyright (c) codebykay101 (CodeByKay) */
@@ -2939,20 +2737,11 @@ body.terminal-open { overflow: hidden; }
 .aki-glass-container .aki-glass-card:nth-child(3) { z-index: 1; }
 
 @media (max-width: 850px) {
-  .aki-uiverse-play { width: 9.5em; height: 3.7em; font-size: 12px; }
   .aki-glass-container { min-height: 190px; }
   .aki-glass-container .aki-glass-card { width: 155px; height: 175px; margin: 0 -39px; }
   .aki-glass-container:hover .aki-glass-card { margin: 0 7px; }
 }
 @media (max-width: 600px) {
-  .aki-uiverse-play { width: 7.2em; height: 3.2em; padding: 0 8px; font-size: 10px; gap: 6px; }
-  .aki-play-label { font-size: 8px; letter-spacing: .12em; }
-  .aki-uiverse-play .music-bars { display: none; }
-  .aki-play-corner { width: 3em; height: 3em; }
-  #aki-right-top { top: -1.45em; left: 91%; }
-  #aki-left-top { top: -1.45em; left: -2.2em; }
-  #aki-left-bottom { top: 1.65em; left: -1.75em; }
-  #aki-right-bottom { top: 45%; left: 88%; }
   .aki-glass-showcase { padding: 18px 5px 12px; overflow: hidden; }
   .aki-glass-container { min-height: 160px; transform: scale(.78); margin: -12px auto; }
   .aki-glass-container .aki-glass-card { width: 132px; height: 152px; margin: 0 -34px; }
@@ -2960,284 +2749,22 @@ body.terminal-open { overflow: hidden; }
 }
 
 
-/* =========================================================
-   BLACK AURA 3.0 — PROJECT CASE STUDIES + RESPONSIVE POLISH
-   ========================================================= */
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1200;
-  width: 100%;
-  height: 2px;
-  pointer-events: none;
-  background: rgba(255,255,255,.07);
-}
-.scroll-progress span {
-  display: block;
-  width: 0;
-  height: 100%;
-  background: rgba(255,255,255,.88);
-  box-shadow: 0 0 9px rgba(255,255,255,.22);
-  transform-origin: left;
-}
-.project-filter-bar {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 0 0 20px;
-}
-.project-filter {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  min-height: 32px;
-  padding: 0 11px;
-  border: 1px solid rgba(255,255,255,.13);
-  border-radius: 7px;
-  background: rgba(255,255,255,.025);
-  color: rgba(255,255,255,.57) !important;
-  font: 700 8px/1 "Space Grotesk", sans-serif;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: color .2s ease, background .2s ease, border-color .2s ease;
-}
-.project-filter span {
-  color: inherit !important;
-  opacity: .62;
-  font-size: 7px;
-}
-.project-filter:hover,
-.project-filter.active {
-  border-color: rgba(255,255,255,.4);
-  background: rgba(255,255,255,.11);
-  color: #fff !important;
-}
-.project-filter-count {
-  margin-left: auto;
-  color: rgba(255,255,255,.34) !important;
-  font: 700 7px "Space Grotesk", sans-serif;
-  letter-spacing: 1px;
-}
-.project-card[hidden] { display: none !important; }
-.carousel-track.is-filtered .project-card {
-  flex-basis: min(100%, 520px);
-}
-.project-details-button {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 13px;
-  padding: 11px 12px;
-  border: 1px solid rgba(255,255,255,.2);
-  border-radius: 7px;
-  background: rgba(255,255,255,.055);
-  color: #fff !important;
-  font: 700 8px "Space Grotesk", sans-serif;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: background .2s ease, border-color .2s ease, transform .2s ease;
-}
-.project-details-button span { color: inherit !important; font-size: 13px; }
-.project-details-button:hover {
-  background: rgba(255,255,255,.13);
-  border-color: rgba(255,255,255,.42);
-  transform: translateY(-1px);
-}
-.project-filter:focus-visible,
-.project-details-button:focus-visible,
-.project-modal-close:focus-visible,
-.project-modal-footer a:focus-visible {
-  outline: 2px solid rgba(255,255,255,.8);
-  outline-offset: 3px;
-}
-.project-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 2600;
-  display: none;
-  place-items: center;
-  padding: 22px;
-}
-.project-modal.open { display: grid; }
-.project-modal-backdrop {
-  position: absolute;
-  inset: 0;
-  background: rgba(2,3,6,.76);
-  -webkit-backdrop-filter: blur(13px);
-  backdrop-filter: blur(13px);
-}
-.project-modal-panel {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: minmax(0,1.05fr) minmax(0,.95fr);
-  width: min(870px, 100%);
-  max-height: min(680px, calc(100vh - 44px));
-  overflow: auto;
-  border: 1px solid rgba(255,255,255,.2);
-  border-radius: 17px;
-  background: rgba(9,10,14,.97);
-  box-shadow: 0 30px 100px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06);
-  animation: projectModalEnter .22s ease-out both;
-}
-@keyframes projectModalEnter {
-  from { opacity: 0; transform: translateY(9px) scale(.99); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-.project-modal-close {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 3;
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border: 1px solid rgba(255,255,255,.2);
+/* BLACK AURA — quiet music control, no decorative play animation */
+.nav-actions .music-btn {
+  min-width: 92px;
+  justify-content: center;
+  padding: 10px 13px;
   border-radius: 9px;
-  background: rgba(0,0,0,.5);
-  color: #fff !important;
-  font-size: 21px;
-  cursor: pointer;
+  background: rgba(255,255,255,.045);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+  transition: border-color .2s ease, background .2s ease;
 }
-.project-modal-image {
-  min-height: 340px;
-  overflow: hidden;
-  background: rgba(255,255,255,.04);
-}
-.project-modal-image img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  min-height: 340px;
-  object-fit: cover;
-}
-.project-modal-body {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 42px 30px 26px;
-}
-.project-modal-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  color: rgba(255,255,255,.44) !important;
-  font: 700 7px "Space Grotesk", sans-serif;
-  letter-spacing: 1.4px;
-}
-.project-modal-body h3 {
-  margin: 17px 0 12px;
-  color: #fff !important;
-  font: 600 clamp(24px,3vw,34px)/1.08 "Space Grotesk",sans-serif;
-  letter-spacing: -1.2px;
-}
-.project-modal-body > p {
-  color: rgba(255,255,255,.65) !important;
-  font-size: 10px;
-  line-height: 2;
-}
-.project-modal-label {
-  margin: 26px 0 10px;
-  color: rgba(255,255,255,.42) !important;
-  font: 700 7px "Space Grotesk",sans-serif;
-  letter-spacing: 1.5px;
-}
-.project-modal-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
-.project-modal-tags span {
-  padding: 7px 9px;
-  border: 1px solid rgba(255,255,255,.15);
-  border-radius: 6px;
-  background: rgba(255,255,255,.05);
-  color: rgba(255,255,255,.8) !important;
-  font: 700 7px "Space Grotesk",sans-serif;
-  letter-spacing: .8px;
-}
-.project-modal-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  width: 100%;
-  margin-top: auto;
-  padding-top: 24px;
-}
-.project-modal-footer > span {
-  color: rgba(255,255,255,.35) !important;
-  font: 700 7px "Space Grotesk",sans-serif;
-  letter-spacing: 1px;
-}
-.project-modal-footer a {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 11px 13px;
-  border: 1px solid rgba(255,255,255,.28);
-  border-radius: 7px;
-  background: rgba(255,255,255,.08);
-  color: #fff !important;
-  font: 700 8px "Space Grotesk",sans-serif;
-  letter-spacing: 1px;
-}
-.project-modal-footer a:hover { background: rgba(255,255,255,.16); }
-body.project-modal-open { overflow: hidden; }
-
-@media (max-width: 760px) {
-  .navbar { gap: 9px; }
-  .menu-btn { display: flex; }
-  .nav-links {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    top: calc(100% + 8px);
-    left: 0;
-    right: 0;
-    padding: 8px;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: var(--nav);
-    -webkit-backdrop-filter: blur(22px);
-    backdrop-filter: blur(22px);
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-8px);
-    transition: opacity .25s ease, transform .25s ease, visibility .25s ease;
-  }
-  .nav-links.open {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-  .nav-link { padding: 12px; font-size: 10px; }
-  .nav-link::after { display: none; }
-}
-@media (min-width: 601px) and (max-width: 760px) {
-  .terminal-trigger { display: flex !important; }
-}
-@media (max-width: 600px) {
-  .project-filter-bar { gap: 6px; }
-  .project-filter { min-height: 30px; padding: 0 8px; font-size: 7px; }
-  .project-filter-count { flex: 0 0 100%; margin: 4px 0 0; }
-  .project-modal { padding: 12px; }
-  .project-modal-panel { grid-template-columns: 1fr; max-height: calc(100vh - 24px); }
-  .project-modal-image, .project-modal-image img { min-height: 190px; max-height: 230px; }
-  .project-modal-body { padding: 22px 18px 18px; }
-  .project-modal-body h3 { margin: 12px 0 9px; }
-  .project-modal-label { margin-top: 18px; }
-  .project-modal-footer { padding-top: 18px; }
-  .project-details-button { min-height: 38px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .project-modal-panel { animation: none; }
-  .carousel-track { transition: none; }
+.nav-actions .music-btn:hover {
+  background: rgba(255,255,255,.09);
+  border-color: rgba(255,255,255,.28);
+  color: var(--text);
 }
