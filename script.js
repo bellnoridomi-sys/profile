@@ -1178,3 +1178,6 @@ document.querySelectorAll(".project-image img[data-project-fallback]").forEach((
     }
   });
 });
+
+// Signal that all synchronous UI initialization completed successfully.
+document.documentElement.dataset.appReady = "true";
