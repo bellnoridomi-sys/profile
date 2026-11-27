@@ -2705,3 +2705,256 @@ body.terminal-open { overflow: hidden; }
     height: 34px;
   }
 }
+
+
+/* From Uiverse.io by Navarog21 - https://uiverse.io/Navarog21/ordinary-rat-19
+   MIT License, Copyright (c) Navarog21 (Arkiweez) */
+.aki-uiverse-play {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 11em;
+  height: 4em;
+  padding: 0 14px;
+  outline: none;
+  border: none;
+  background: transparent;
+  color: #ddebf0 !important;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  isolation: isolate;
+}
+.aki-play-label {
+  position: relative;
+  z-index: 2;
+  color: inherit !important;
+  font: 700 10px/1 "Space Grotesk", sans-serif;
+  letter-spacing: .18em;
+  text-shadow: none !important;
+  white-space: nowrap;
+}
+.aki-uiverse-play .music-bars {
+  position: relative;
+  z-index: 2;
+  height: 13px;
+  gap: 2px;
+  opacity: .72;
+}
+.aki-uiverse-play .music-bars i {
+  width: 2px;
+  height: 4px;
+  border-radius: 5px;
+  background: currentColor;
+}
+.aki-uiverse-play.playing .music-bars i {
+  animation: musicPulse .55s ease-in-out infinite alternate;
+}
+.aki-uiverse-play .music-bars i:nth-child(2) { animation-delay: .15s; }
+.aki-uiverse-play .music-bars i:nth-child(3) { animation-delay: .3s; }
+.aki-uiverse-play .music-bars i:nth-child(4) { animation-delay: .1s; }
+
+#aki-play-clip {
+  --aki-clip-color: #2761c3;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border: 5px double var(--aki-clip-color);
+  box-shadow: inset 0 0 15px #195480;
+  clip-path: polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%);
+  -webkit-clip-path: polygon(30% 0%,70% 0%,100% 30%,100% 70%,70% 100%,30% 100%,0% 70%,0% 30%);
+  transition: box-shadow .2s ease, border-color .2s ease;
+  pointer-events: none;
+}
+.aki-play-arrow {
+  position: absolute;
+  z-index: 2;
+  top: 35%;
+  width: 11%;
+  height: 30%;
+  background: #2761c3;
+  transition: .2s;
+  pointer-events: none;
+}
+.aki-right-arrow {
+  left: 102%;
+  clip-path: polygon(100% 49%,0 0,0 100%);
+  -webkit-clip-path: polygon(100% 49%,0 0,0 100%);
+}
+.aki-left-arrow {
+  left: -13.5%;
+  clip-path: polygon(100% 0,100% 100%,0 50%);
+  -webkit-clip-path: polygon(100% 0,100% 100%,0 50%);
+}
+.aki-play-corner {
+  position: absolute;
+  width: 4em;
+  height: 4em;
+  background: #2761c3;
+  box-shadow: inset 1px 1px 8px #2781c3;
+  transform: scale(1) rotate(45deg);
+  transition: .2s;
+}
+#aki-right-top { top: -1.98em; left: 91%; }
+#aki-left-top { top: -1.96em; left: -3em; }
+#aki-left-bottom { top: 2.10em; left: -2.15em; }
+#aki-right-bottom { top: 45%; left: 88%; }
+.aki-uiverse-play:hover .aki-right-arrow {
+  background: #27c39f;
+  left: -15%;
+  animation: aki-right-arrow8 .6s ease-in-out both infinite alternate;
+}
+.aki-uiverse-play:hover .aki-left-arrow {
+  background: #27c39f;
+  left: 103%;
+  animation: aki-left-arrow8 .6s ease-in-out both infinite alternate;
+}
+.aki-uiverse-play:hover #aki-left-top {
+  animation: aki-change-color8 .1s ease-in-out .05s both, aki-light-effect8 .2s linear .4s both;
+}
+.aki-uiverse-play:hover #aki-right-top {
+  animation: aki-change-color8 .1s ease-in-out .15s both, aki-light-effect8 .2s linear .4s both;
+}
+.aki-uiverse-play:hover #aki-right-bottom {
+  animation: aki-change-color8 .1s ease-in-out .25s both, aki-light-effect8 .2s linear .4s both;
+}
+.aki-uiverse-play:hover #aki-left-bottom {
+  animation: aki-change-color8 .1s ease-in-out .35s both, aki-light-effect8 .2s linear .4s both;
+}
+.aki-uiverse-play:hover .aki-play-corner {
+  transform: scale(1.25) rotate(45deg);
+}
+.aki-uiverse-play:hover #aki-play-clip {
+  animation: aki-green-light8 .2s ease-in-out .55s both;
+  --aki-clip-color: #27c39f;
+}
+@keyframes aki-change-color8 {
+  from { background-color: #2781c3; }
+  to { background-color: #27c39f; }
+}
+@keyframes aki-light-effect8 {
+  from { box-shadow: 1px 1px 5px #27c39f; }
+  to { box-shadow: 0 0 2px #27c39f; }
+}
+@keyframes aki-green-light8 {
+  to { box-shadow: inset 0 0 32px #27c39f; }
+}
+@keyframes aki-left-arrow8 {
+  from { transform: translateX(0); }
+  to { transform: translateX(10px); }
+}
+@keyframes aki-right-arrow8 {
+  from { transform: translateX(0); }
+  to { transform: translateX(-10px); }
+}
+.aki-uiverse-play:focus-visible {
+  outline: 2px solid rgba(255,255,255,.8);
+  outline-offset: 5px;
+}
+.aki-uiverse-play:active { transform: scale(.97); }
+
+/* From Uiverse.io by codebykay101 - https://uiverse.io/codebykay101/ugly-lion-23
+   MIT License, Copyright (c) codebykay101 (CodeByKay) */
+.aki-glass-showcase {
+  margin: 46px auto 8px;
+  padding: 22px 16px 18px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 18px;
+  background: rgba(255,255,255,.025);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  text-align: center;
+}
+.aki-glass-intro .eyebrow {
+  display: inline-block;
+  color: rgba(255,255,255,.5) !important;
+  font-size: 8px;
+  letter-spacing: 2px;
+}
+.aki-glass-intro p {
+  margin-top: 8px;
+  color: rgba(255,255,255,.62) !important;
+  font: 600 9px/1.6 "Space Grotesk", sans-serif;
+  letter-spacing: 1.2px;
+}
+.aki-glass-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 220px;
+  margin: 2px auto 0;
+}
+.aki-glass-container .aki-glass-card {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 180px;
+  height: 200px;
+  margin: 0 -45px;
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px;
+  background: linear-gradient(rgba(255,255,255,.13), transparent);
+  box-shadow: 0 25px 25px rgba(0,0,0,.25);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transform: rotate(calc(var(--r) * 1deg));
+  transition: transform .5s ease, margin .5s ease, background .5s ease;
+  cursor: default;
+}
+.aki-glass-container .aki-glass-card::before {
+  content: attr(data-text);
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  background: rgba(255,255,255,.05);
+  color: #fff;
+  font: 600 10px "Space Grotesk", sans-serif;
+  letter-spacing: 1.6px;
+}
+.aki-glass-container .aki-glass-card svg {
+  width: 1em;
+  height: 1em;
+  font-size: 2.5em;
+  fill: #fff;
+  filter: drop-shadow(0 4px 14px rgba(255,255,255,.12));
+}
+.aki-glass-container:hover .aki-glass-card {
+  margin: 0 10px;
+  transform: rotate(0deg);
+  background: linear-gradient(rgba(255,255,255,.17), rgba(255,255,255,.015));
+}
+.aki-glass-container .aki-glass-card:nth-child(1) { z-index: 3; }
+.aki-glass-container .aki-glass-card:nth-child(2) { z-index: 2; }
+.aki-glass-container .aki-glass-card:nth-child(3) { z-index: 1; }
+
+@media (max-width: 850px) {
+  .aki-uiverse-play { width: 9.5em; height: 3.7em; font-size: 12px; }
+  .aki-glass-container { min-height: 190px; }
+  .aki-glass-container .aki-glass-card { width: 155px; height: 175px; margin: 0 -39px; }
+  .aki-glass-container:hover .aki-glass-card { margin: 0 7px; }
+}
+@media (max-width: 600px) {
+  .aki-uiverse-play { width: 7.2em; height: 3.2em; padding: 0 8px; font-size: 10px; gap: 6px; }
+  .aki-play-label { font-size: 8px; letter-spacing: .12em; }
+  .aki-uiverse-play .music-bars { display: none; }
+  .aki-play-corner { width: 3em; height: 3em; }
+  #aki-right-top { top: -1.45em; left: 91%; }
+  #aki-left-top { top: -1.45em; left: -2.2em; }
+  #aki-left-bottom { top: 1.65em; left: -1.75em; }
+  #aki-right-bottom { top: 45%; left: 88%; }
+  .aki-glass-showcase { padding: 18px 5px 12px; overflow: hidden; }
+  .aki-glass-container { min-height: 160px; transform: scale(.78); margin: -12px auto; }
+  .aki-glass-container .aki-glass-card { width: 132px; height: 152px; margin: 0 -34px; }
+  .aki-glass-container:hover .aki-glass-card { margin: 0 4px; }
+}
