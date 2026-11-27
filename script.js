@@ -654,7 +654,6 @@ navLinks.forEach((link) => {
 const music = $("#bgMusic");
 const musicBtn = $("#musicBtn");
 const musicLabel = $("#musicLabel");
-const musicBars = $("#musicBars");
 const visualizerWrap = $("#visualizerWrap");
 const visualizerCanvas = $("#visualizer");
 const visualizerCtx = visualizerCanvas.getContext("2d");
@@ -831,24 +830,6 @@ document.addEventListener('DOMContentLoaded', () => {
 /* =========================================================
    BLACK AURA 2.0 — LIVE PRESENCE / TERMINAL / MUSIC / LOADER
    ========================================================= */
-
-// Brief page intro. Wait for the page assets, then get out of the way.
-(() => {
-  const preloader = $("#preloader");
-  if (!preloader) return;
-  let preloaderHidden = false;
-  const hidePreloader = () => {
-    if (preloaderHidden) return;
-    preloaderHidden = true;
-    window.setTimeout(() => {
-      preloader.classList.add("is-hidden");
-      window.setTimeout(() => preloader.remove(), 650);
-    }, 180);
-  };
-  if (document.readyState === "complete") hidePreloader();
-  else window.addEventListener("load", hidePreloader, { once: true });
-  window.setTimeout(hidePreloader, 2800);
-})();
 
 // Discord presence via Lanyard. The account owner must opt in by joining Lanyard.
 (() => {
