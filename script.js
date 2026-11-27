@@ -393,7 +393,7 @@ if (!reducedMotion) {
 // PROJECT CAROUSEL + CATEGORY FILTERS
 const carouselTrack = $("#carouselTrack");
 const carouselViewport = $("#carouselViewport");
-const projectCards = $(".project-card", carouselTrack);
+const projectCards = $$(".project-card", carouselTrack);
 const projectFilters = $(".project-filter");
 const prevProject = $("#prevProject");
 const nextProject = $("#nextProject");
