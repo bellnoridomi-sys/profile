@@ -617,6 +617,8 @@ musicBtn.addEventListener("click", async () => {
       await music.play();
 
       musicBtn.classList.add("playing");
+      musicBtn.setAttribute("aria-label", "Pause music");
+      musicBtn.setAttribute("aria-pressed", "true");
       musicLabel.textContent = "PAUSE MUSIC";
       visualizerWrap.classList.add("visible");
 
@@ -626,12 +628,16 @@ musicBtn.addEventListener("click", async () => {
       }
     } catch (error) {
       console.error("Audio playback error:", error);
-      musicLabel.textContent = "CHECK MUSIC FILE";
+      musicBtn.setAttribute("aria-label", "Music file unavailable");
+      musicBtn.setAttribute("aria-pressed", "false");
+      musicLabel.textContent = "CHECK FILE";
     }
   } else {
     music.pause();
     musicBtn.classList.remove("playing");
-    musicLabel.textContent = "PLAY MUSIC";
+    musicBtn.setAttribute("aria-label", "Play music");
+    musicBtn.setAttribute("aria-pressed", "false");
+    musicLabel.textContent = "P L A Y";
     visualizerWrap.classList.remove("visible");
     stopVisualizer();
   }
@@ -639,7 +645,9 @@ musicBtn.addEventListener("click", async () => {
 
 music.addEventListener("ended", () => {
   musicBtn.classList.remove("playing");
-  musicLabel.textContent = "PLAY MUSIC";
+  musicBtn.setAttribute("aria-label", "Play music");
+  musicBtn.setAttribute("aria-pressed", "false");
+  musicLabel.textContent = "P L A Y";
   visualizerWrap.classList.remove("visible");
   stopVisualizer();
 });
@@ -1017,3 +1025,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   syncPlayer();
 })();
+
+
+// Project thumbnails: retain local previews as a fallback if an external image is unavailable.
+document.querySelectorAll(".project-image img[data-project-fallback]").forEach((image) => {
+  image.addEventListener("error", () => {
+    const fallback = image.dataset.projectFallback;
+    if (fallback && !image.dataset.fallbackTried) {
+      image.dataset.fallbackTried = "true";
+      image.src = fallback;
+    }
+  });
+});
