@@ -2122,3 +2122,77 @@ body, h1, h2, h3, p, span, a, div {
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
   transform: translateY(-2px);
 }
+
+/* ===== AKI PROFILE REFRESH — BACKGROUND + SOFT GLASS ===== */
+body {
+  position: relative;
+  isolation: isolate;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(5, 7, 12, .48), rgba(5, 7, 12, .64)),
+    url("https://i.pinimg.com/736x/96/7f/03/967f03d1d71c27c0a7ff0604f46df4ed.jpg")
+      center center / cover no-repeat;
+  transform: translateZ(0);
+}
+
+.ambient {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+#particles,
+.ambient {
+  z-index: 0 !important;
+}
+
+main,
+.footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Cards: about 10% white tint, with a soft frosted-glass blur */
+.project-card,
+.skill-card,
+.contact-card,
+.carousel-shell,
+.about-image-frame,
+.stat {
+  background: rgba(255, 255, 255, .10) !important;
+  border: 1px solid rgba(255, 255, 255, .20) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(125%);
+  backdrop-filter: blur(14px) saturate(125%);
+  box-shadow:
+    0 12px 36px rgba(0, 0, 0, .16),
+    inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+.project-card:hover,
+.skill-card:hover {
+  background: rgba(255, 255, 255, .14) !important;
+  border-color: rgba(255, 255, 255, .34) !important;
+}
+
+.hero-avatar {
+  filter: none !important;
+}
+
+.about-image-frame img {
+  filter: none !important;
+}
+
+@media (max-width: 600px) {
+  body::before {
+    background-attachment: scroll;
+    background-position: center;
+  }
+}
