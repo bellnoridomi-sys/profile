@@ -2693,3 +2693,15 @@ main,
   .preloader-track span { animation: none; width: 100%; }
   .terminal-window { animation: none; }
 }
+
+
+/* Final mobile/accessibility touch-ups */
+body.terminal-open { overflow: hidden; }
+@media (max-width: 600px) {
+  .terminal-trigger {
+    display: flex !important;
+    flex: 0 0 34px;
+    width: 34px;
+    height: 34px;
+  }
+}
